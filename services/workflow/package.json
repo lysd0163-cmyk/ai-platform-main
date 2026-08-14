@@ -1,0 +1,1 @@
+{"name":"@ai-os/workflow","version":"0.1.0","private":true,"type":"module","exports":"./src/index.ts","dependencies":{"@ai-os/ai-core":"workspace:*","@ai-os/automation":"workspace:*","@ai-os/integrations":"workspace:*","@ai-os/mcp":"workspace:*"},"scripts":{"typecheck":"tsc --noEmit -p tsconfig.json"},"devDependencies":{"typescript":"^5.9.2"}}
