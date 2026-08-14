@@ -1,5 +1,5 @@
 import type { LLMRequest, LLMResponse, ToolSchema, MultiModelRouter, ChatMessage } from "@ai-os/model-router";
-import type { ToolContext, ToolDefinition } from "@ai-os/tools";
+import { executeTool, type ToolContext, type ToolDefinition } from "@ai-os/tools";
 
 export interface AgentRunOptions {
   systemPrompt: string;
@@ -29,10 +29,7 @@ function toToolSchema(tool: ToolDefinition): ToolSchema {
   return {
     name: tool.name,
     description: tool.description,
-    parameters: (tool as ToolDefinition & { parameters?: Record<string, unknown> }).parameters ?? {
-      type: "object",
-      properties: {}
-    }
+    parameters: tool.parameters ?? { type: "object", properties: {} }
   };
 }
 
@@ -76,9 +73,7 @@ export class AgentRunner {
       });
       this.emit({ type: "llm.completed", timestamp: new Date().toISOString(), payload: { round: rounds, finishReason: response.finishReason } });
 
-      if (response.toolCalls.length === 0) {
-        return { response, rounds, toolCallsExecuted };
-      }
+      if (response.toolCalls.length === 0) return { response, rounds, toolCallsExecuted };
 
       messages.push({ role: "assistant", content: response.content });
 
@@ -93,7 +88,7 @@ export class AgentRunner {
         this.emit({ type: "tool.requested", timestamp: new Date().toISOString(), payload: { tool: call.name, callId: call.id } });
         try {
           const input = JSON.parse(call.argumentsJson) as unknown;
-          const output = await tool.execute(input, options.toolContext);
+          const output = await executeTool(tool, input, options.toolContext);
           toolCallsExecuted += 1;
           this.emit({ type: "tool.completed", timestamp: new Date().toISOString(), payload: { tool: call.name, callId: call.id } });
           messages.push({ role: "tool", toolCallId: call.id, content: JSON.stringify(output) });
