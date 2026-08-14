@@ -9,6 +9,7 @@ export interface ToolDefinition {
   name: string;
   description: string;
   requiredPermissions: string[];
+  parameters?: Record<string, unknown>;
   execute(input: unknown, context: ToolContext): Promise<unknown>;
 }
 
