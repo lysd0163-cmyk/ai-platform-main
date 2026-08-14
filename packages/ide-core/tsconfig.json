@@ -1,0 +1,1 @@
+{"extends":"../../tsconfig.base.json","compilerOptions":{"baseUrl":".","paths":{"@ai-os/workspace-engine":["../workspace-engine/src/index.ts"]}},"include":["src/**/*.ts"]}
