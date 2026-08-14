@@ -34,7 +34,17 @@ A modular AI operating system for building, running, automating, and operating d
 - LLM/agent events for observability
 - Orchestrator bootstrap for LLM-backed steps
 
-The current OpenAI integration uses the official OpenAI TypeScript SDK. The repository does not contain a secret value; configure `OPENAI_API_KEY` in the runtime environment.
+## Phase 4 — Universal Builder
+
+- Natural-language product planner
+- Automatic product-type detection
+- Web / API / SaaS / mobile / desktop / game / ecommerce / CRM / ERP / bot classifications
+- Provider-neutral architecture specification
+- Build-stage model
+- Generated file manifest
+- Required service and environment contracts
+- Build validation for duplicate files, missing entrypoints, tests, and security artifacts
+- Clean boundary between planning and later side-effectful code generation/execution
 
 ## Architecture
 
@@ -47,6 +57,7 @@ packages/
   agents/              Agent definitions + LLM agent runner
   model-router/        Provider-neutral router + OpenAI adapter
   tools/               Tool contracts + permission checks
+  universal-builder/   Natural-language product planning + build manifests
   memory/              Memory/knowledge contracts
   projects/            Project/workspace contracts
   security/            Security primitives/contracts
@@ -54,7 +65,7 @@ packages/
 services/
   orchestrator/        Planning + runtime + LLM execution
   sandbox/             Isolated execution boundary
-  workflow/            Automation engine boundary
+  workflow/             Automation engine boundary
   deployment/          Deployment engine boundary
 infrastructure/
   docker/              Container infrastructure
@@ -75,7 +86,7 @@ infrastructure/
 Phase 1: Core foundation — complete
 Phase 2: Multi-agent orchestration — complete
 Phase 3: LLM runtime — complete
-Phase 4: Universal builder
+Phase 4: Universal builder — complete
 Phase 5: IDE and sandbox
 Phase 6: Memory/RAG/knowledge
 Phase 7: Cloud/deployment/data
