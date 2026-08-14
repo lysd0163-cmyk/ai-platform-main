@@ -74,6 +74,10 @@ export class ApprovalManager {
     return [...this.requests.values()].filter((request) => request.taskId === taskId);
   }
 
+  get(id: string): ApprovalRequest | undefined {
+    return this.requests.get(id);
+  }
+
   decide(id: string, approved: boolean, userId: string): ApprovalRequest {
     const request = this.requests.get(id);
     if (!request) throw new Error(`Approval not found: ${id}`);
@@ -94,11 +98,15 @@ export class TaskExecutionRuntime {
   ) {}
 
   async run(task: OrchestrationTask, plan: TaskPlan): Promise<TaskStatus> {
-    this.emit(task, "task.started");
-    task.status = "running";
+    return this.runFrom(task, plan, new Set());
+  }
 
-    const completed = new Set<string>();
-    const pending = [...plan.steps];
+  async runFrom(task: OrchestrationTask, plan: TaskPlan, completed: Set<string>): Promise<TaskStatus> {
+    if (task.status !== "waiting_approval") {
+      this.emit(task, "task.started");
+    }
+    task.status = "running";
+    const pending = plan.steps.filter((step) => !completed.has(step.id));
 
     while (pending.length > 0) {
       const readyIndex = pending.findIndex((step) => step.dependsOn.every((id) => completed.has(id)));
@@ -112,15 +120,20 @@ export class TaskExecutionRuntime {
       this.emit(task, "step.ready", step.id, { dependencies: step.dependsOn });
 
       if (this.approvalPolicy.requiresApproval(step)) {
-        const approval = this.approvals.create(
-          task.id,
-          step.id,
-          `Approval required before ${step.agentId} executes this step.`,
-          this.approvalPolicy.riskFor(step)
-        );
-        task.status = "waiting_approval";
-        this.emit(task, "approval.requested", step.id, { approvalId: approval.id, risk: approval.risk });
-        return task.status;
+        const existing = this.approvals.get(`${task.id}:approval:${step.id}`);
+        if (!existing || existing.status !== "approved") {
+          const approval = existing ?? this.approvals.create(
+            task.id,
+            step.id,
+            `Approval required before ${step.agentId} executes this step.`,
+            this.approvalPolicy.riskFor(step)
+          );
+          task.status = "waiting_approval";
+          if (approval.status === "pending") {
+            this.emit(task, "approval.requested", step.id, { approvalId: approval.id, risk: approval.risk });
+          }
+          return task.status;
+        }
       }
 
       await this.executeStepWithRetry(task, step);
