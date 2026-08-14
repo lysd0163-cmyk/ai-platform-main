@@ -1,0 +1,2 @@
+export interface AIOSClientOptions { baseUrl:string; apiKey?:string; }
+export class AIOSClient { constructor(private readonly options:AIOSClientOptions){} async request<T>(path:string, init:RequestInit={}):Promise<T>{ const headers=new Headers(init.headers); if(this.options.apiKey) headers.set("Authorization",`Bearer ${this.options.apiKey}`); headers.set("Content-Type","application/json"); const res=await fetch(new URL(path,this.options.baseUrl),{...init,headers}); if(!res.ok) throw new Error(`AIOS request failed: ${res.status}`); return res.json() as Promise<T>; } }
