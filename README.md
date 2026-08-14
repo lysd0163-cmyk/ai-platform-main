@@ -1,100 +1,48 @@
 # AI Operating System Platform
 
-A modular AI operating system for building, running, automating, and operating digital products.
+A modular AI Operating System foundation for building, running, automating, and operating digital products.
 
-## Phases 1-8
+## Status
 
-The foundation, multi-agent runtime, LLM runtime, Universal Builder, IDE/Sandbox, Cloud/Deployment/Databases, Automation/Integrations/MCP, and Security/Enterprise/Billing layers are implemented as modular contracts and development runtimes.
+**Phases 1–12 implemented at the architecture/core-runtime level.**
 
-## Phase 9 — Trading Platform
-- Provider-neutral MT4 / MT5 / TradingView / generic broker contracts
-- OHLCV and order domain models
-- Risk engine with per-trade, daily-loss, and open-position controls
-- Backtest result model and performance summarizer
-- Strategy contract for future AI/EAs
+The repository now contains the platform foundation, multi-agent runtime, LLM integration, Universal Builder, IDE/Sandbox boundaries, Cloud/Deployment/Database abstractions, Automation/Integrations/MCP, Security/Enterprise/Billing, Trading, AI Media/Research, Marketplace/Plugins/SDK, and production release gates.
 
-## Phase 10 — AI Media + Research Studio
-- Source/search provider contract
-- Research request/report model
-- Citation-aware claim model
-- Uncertainty tracking
-- Image/audio/video/music/3D/document media job contracts
-- Provider-neutral media adapters
+This is intentionally provider-neutral: real cloud, database, broker, payment, identity, media, and hardened sandbox adapters are configured per deployment environment rather than hard-coded into the core.
 
-## Phase 11 — Marketplace + Plugins + SDK
-- Agent/plugin/template/theme/workflow/integration/model marketplace package model
-- Versioned package registry
-- Plugin manifest validation
-- Permission restrictions for packages
-- TypeScript SDK client for API consumers
-- Stable package boundaries for future language SDKs
+## Platform layers
 
-## Phase 12 — Integration + Testing + Hardening + Production Release
-- Integration registry and webhook contract
-- Production release gates
-- Typecheck / unit / security / config / migration / smoke gate model
-- Release readiness evaluator
-- GitHub Actions CI for typechecking and release smoke checks
-- Production release checklist
-- Explicit separation between development adapters and production-grade infrastructure
+- **AI Core:** agents, orchestration, memory, model routing, tool calling
+- **Universal Builder:** natural-language product planning and build manifests
+- **Developer Environment:** workspace filesystem, editor protocol, terminal, preview, sandbox boundary
+- **Cloud:** resource provisioning, deployments, databases, rollback contracts
+- **Automation:** workflows, triggers, integrations, MCP
+- **Enterprise:** RBAC, organizations, workspaces, SSO contracts, audit, billing
+- **Trading:** broker/provider contracts, risk controls, strategies, backtest models
+- **Research & Media:** research reports, source-aware claims, multimodal job contracts
+- **Marketplace:** plugins, agents, templates, themes, workflows, integrations, models
+- **SDK:** TypeScript API client boundary
+- **Production:** CI, release gates, security policy, deployment requirements
 
-## Architecture
+## Production completion gates
 
-```text
-apps/
-  web/                 Future platform UI
-  api/                 Future public API
-packages/
-  ai-core/             Core contracts
-  agents/              Agent definitions + LLM runner
-  model-router/        Provider-neutral router + OpenAI adapter
-  tools/               Tool contracts + workspace tools
-  universal-builder/   Natural-language planning + build manifests
-  workspace-engine/    Project filesystem + sessions
-  ide-core/            Editor/terminal/preview protocol
-  cloud/               Cloud resource abstraction
-  deployment/          Deployment/release contracts
-  database/            Database provider/migration abstractions
-  automation/          Workflow engine
-  integrations/        Integration registry + webhook contracts
-  mcp/                 MCP registry
-  security/            RBAC, secrets and audit primitives
-  enterprise/          Organizations, memberships and SSO contracts
-  billing/             Plans, subscriptions, usage and invoicing
-  trading/             Trading/risk/backtest core
-  research-studio/     Research and multimodal media core
-  marketplace/         Marketplace + plugin contracts
-  sdk/                 TypeScript SDK client
-  production-core/     Release gates and production readiness
-services/
-  orchestrator/        Planning + runtime + LLM execution
-  sandbox/             Command guard + sandbox jobs
-  workflow/            Automation/integration runtime
-  deployment/          Deployment engine boundary
-```
+Before public production launch, the target environment must provide:
 
-## Security principles
-1. Never commit `OPENAI_API_KEY` or any secret.
-2. Tools require explicit permissions.
-3. High-risk operations remain approval-gated.
-4. Model providers are adapters; business logic does not depend on one provider.
-5. Long-running tasks are observable and resumable.
-6. External side effects stay behind explicit tool/service boundaries.
-7. The local sandbox adapter is a development adapter, not production-grade isolation; production execution must use hardened container/VM infrastructure.
-8. Trading live execution must remain behind explicit broker adapters and risk controls.
-9. Marketplace packages must declare permissions and be validated before installation.
-10. Production release is blocked until configured quality gates pass.
+1. Real provider credentials through a managed secret store.
+2. Hardened container/VM execution behind the SandboxAdapter.
+3. Real cloud/database/payment/identity/broker/media adapters as required.
+4. Successful CI typecheck, tests, lint, security and smoke checks.
+5. Reviewed database migrations and backups.
+6. Observability, rate limiting, audit logging and alerting.
+7. Verified health checks, rollback and disaster-recovery procedures.
 
-## Roadmap
-Phase 1: Core foundation — complete
-Phase 2: Multi-agent orchestration — complete
-Phase 3: LLM runtime — complete
-Phase 4: Universal builder — complete
-Phase 5: IDE and sandbox — complete
-Phase 6: Cloud/deployment/data — complete
-Phase 7: Automation/MCP/integrations — complete
-Phase 8: Security/enterprise/billing — complete
-Phase 9: Trading platform — complete
-Phase 10: AI media/research — complete
-Phase 11: Marketplace/SDK/plugins — complete
-Phase 12: Integration, hardening, and production release — implementation complete; production deployment still requires real provider adapters, environment configuration, and CI execution in the target infrastructure.
+## Security
+
+- Never commit secrets such as `OPENAI_API_KEY`.
+- Tools use explicit permissions; high-risk operations require approval.
+- External side effects remain behind service/tool boundaries.
+- Production execution must not use the local-process sandbox.
+- Live trading remains behind explicit broker adapters and risk controls.
+- Marketplace packages must declare and pass permission validation.
+
+See `DEPLOYMENT.md` and `SECURITY.md` for the final release requirements.
