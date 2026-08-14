@@ -123,7 +123,7 @@ export class TaskExecutionRuntime {
         return task.status;
       }
 
-      await this.executeWithRetry(task, step);
+      await this.executeStepWithRetry(task, step);
       completed.add(step.id);
     }
 
@@ -133,7 +133,11 @@ export class TaskExecutionRuntime {
     return task.status;
   }
 
-  private async executeWithRetry(task: OrchestrationTask, step: TaskPlanStep): Promise<void> {
+  async executeApprovedStep(task: OrchestrationTask, step: TaskPlanStep): Promise<void> {
+    await this.executeStepWithRetry(task, step);
+  }
+
+  private async executeStepWithRetry(task: OrchestrationTask, step: TaskPlanStep): Promise<void> {
     for (;;) {
       try {
         this.emit(task, "step.started", step.id, { attempt: task.retryCount + 1 }, step.agentId);
