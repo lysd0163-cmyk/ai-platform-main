@@ -4,6 +4,7 @@ export interface ChatMessage {
   role: "system" | "user" | "assistant" | "tool";
   content: string;
   toolCallId?: string;
+  toolCalls?: ToolCall[];
 }
 
 export interface ToolCall {
