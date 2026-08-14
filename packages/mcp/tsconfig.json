@@ -1,0 +1,1 @@
+{"extends":"../../tsconfig.base.json","compilerOptions":{"baseUrl":".","paths":{"@ai-os/ai-core":["../ai-core/src/index.ts"],"@ai-os/tools":["../tools/src/index.ts"]}},"include":["src/**/*.ts"]}
