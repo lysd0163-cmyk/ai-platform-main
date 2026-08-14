@@ -15,3 +15,5 @@ export const builtinAgents: AgentDefinition[] = [
 export function getAgent(id: string): AgentDefinition | undefined {
   return builtinAgents.find((agent) => agent.id === id);
 }
+
+export * from "./agent-runner";
