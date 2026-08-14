@@ -16,7 +16,16 @@ function toOpenAIMessage(message: ChatMessage): OpenAI.Chat.ChatCompletionMessag
     if (!message.toolCallId) throw new Error("Tool messages require toolCallId");
     return { role: "tool", tool_call_id: message.toolCallId, content: message.content };
   }
-  return { role: "assistant", content: message.content };
+
+  return {
+    role: "assistant",
+    content: message.content,
+    tool_calls: message.toolCalls?.map((call) => ({
+      id: call.id,
+      type: "function",
+      function: { name: call.name, arguments: call.argumentsJson }
+    }))
+  };
 }
 
 export class OpenAIProvider implements LLMProvider {
