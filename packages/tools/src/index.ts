@@ -23,3 +23,5 @@ export async function executeTool(tool: ToolDefinition, input: unknown, context:
   }
   return tool.execute(input, context);
 }
+
+export * from "./workspace-tools";
