@@ -1,0 +1,13 @@
+{
+  "name": "ai-operating-system-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Modular AI Operating System platform foundation",
+  "packageManager": "pnpm@10.14.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  }
+}
