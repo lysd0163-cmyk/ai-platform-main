@@ -59,10 +59,7 @@ export class AgentRunner {
 
     while (rounds < maxRounds) {
       rounds += 1;
-      const request: Omit<LLMRequest, "model"> = {
-        messages,
-        tools: this.tools.map(toToolSchema)
-      };
+      const request: Omit<LLMRequest, "model"> = { messages, tools: this.tools.map(toToolSchema) };
 
       this.emit({ type: "llm.requested", timestamp: new Date().toISOString(), payload: { round: rounds } });
       response = await this.router.complete(request, {
@@ -75,7 +72,7 @@ export class AgentRunner {
 
       if (response.toolCalls.length === 0) return { response, rounds, toolCallsExecuted };
 
-      messages.push({ role: "assistant", content: response.content });
+      messages.push({ role: "assistant", content: response.content, toolCalls: response.toolCalls });
 
       for (const call of response.toolCalls) {
         const tool = this.tools.find((candidate) => candidate.name === call.name);
