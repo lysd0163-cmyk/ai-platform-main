@@ -46,6 +46,21 @@ A modular AI operating system for building, running, automating, and operating d
 - Build validation for duplicate files, missing entrypoints, tests, and security artifacts
 - Clean boundary between planning and later side-effectful code generation/execution
 
+## Phase 5 — IDE and Sandbox
+
+- Workspace filesystem abstraction
+- Path traversal protection
+- Persistent workspace sessions
+- Editor documents with versions and dirty state
+- Terminal sessions
+- Preview target lifecycle
+- Permission-aware workspace tools for agents
+- Sandbox command allowlist
+- Shell chaining, substitution, and redirection blocked by default
+- Timeout-aware local execution adapter
+- Queueable sandbox jobs and execution results
+- Provider-neutral `SandboxAdapter` boundary for future containerized isolation
+
 ## Architecture
 
 ```text
@@ -56,16 +71,18 @@ packages/
   ai-core/             Core domain contracts
   agents/              Agent definitions + LLM agent runner
   model-router/        Provider-neutral router + OpenAI adapter
-  tools/               Tool contracts + permission checks
+  tools/               Tool contracts + permission checks + workspace tools
   universal-builder/   Natural-language product planning + build manifests
+  workspace-engine/    Project filesystem + workspace sessions
+  ide-core/            Editor/terminal/preview workspace protocol
   memory/              Memory/knowledge contracts
   projects/            Project/workspace contracts
   security/            Security primitives/contracts
   shared/              Shared types and utilities
 services/
   orchestrator/        Planning + runtime + LLM execution
-  sandbox/             Isolated execution boundary
-  workflow/             Automation engine boundary
+  sandbox/             Command guard + sandbox job runtime
+  workflow/            Automation engine boundary
   deployment/          Deployment engine boundary
 infrastructure/
   docker/              Container infrastructure
@@ -80,6 +97,7 @@ infrastructure/
 4. Model providers are adapters; business logic does not depend on one provider.
 5. Long-running tasks are observable and resumable.
 6. External side effects stay behind explicit tool/service boundaries.
+7. The local sandbox adapter is a development adapter, not a claim of production-grade isolation; production execution must use a hardened container/VM backend behind the same `SandboxAdapter` interface.
 
 ## Roadmap
 
@@ -87,7 +105,7 @@ Phase 1: Core foundation — complete
 Phase 2: Multi-agent orchestration — complete
 Phase 3: LLM runtime — complete
 Phase 4: Universal builder — complete
-Phase 5: IDE and sandbox
+Phase 5: IDE and sandbox — complete
 Phase 6: Memory/RAG/knowledge
 Phase 7: Cloud/deployment/data
 Phase 8: Automation/MCP/integrations
