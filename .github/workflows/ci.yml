@@ -1,10 +1,12 @@
 name: CI
+
 on:
   push:
     branches: [main]
   pull_request:
+
 jobs:
-  typecheck:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,15 +19,5 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile=false
       - run: pnpm -r typecheck
-  unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.14.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: pnpm install --frozen-lockfile=false
-      - run: node --test packages/production-core/tests/*.test.mjs
+      - run: pnpm -r test
+      - run: pnpm -r lint
