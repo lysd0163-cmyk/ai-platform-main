@@ -1,0 +1,1 @@
+{"name":"@ai-os/sandbox","version":"0.1.0","private":true,"type":"module","exports":"./src/index.ts","dependencies":{"@ai-os/ai-core":"workspace:*","@ai-os/tools":"workspace:*","@ai-os/workspace-engine":"workspace:*"},"scripts":{"typecheck":"tsc --noEmit -p tsconfig.json"},"devDependencies":{"typescript":"^5.9.2"}}
