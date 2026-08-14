@@ -1,1 +1,1 @@
-{"extends":"../../tsconfig.base.json","compilerOptions":{"baseUrl":".","paths":{"@ai-os/ai-core":["../ai-core/src/index.ts"]}},"include":["src/**/*.ts"]}
+{"extends":"../../tsconfig.base.json","compilerOptions":{"baseUrl":".","types":["node"],"paths":{"@ai-os/ai-core":["../ai-core/src/index.ts"]}},"include":["src/**/*.ts"]}
