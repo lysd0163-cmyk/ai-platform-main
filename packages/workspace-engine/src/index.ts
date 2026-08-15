@@ -29,6 +29,10 @@ function normalizePath(input: string): string {
   return safe.join("/");
 }
 
+function byteLength(content: string): number {
+  return new TextEncoder().encode(content).byteLength;
+}
+
 export class InMemoryFileStore implements FileStore {
   private readonly files = new Map<string, string>();
 
@@ -36,7 +40,7 @@ export class InMemoryFileStore implements FileStore {
     return [...this.files.entries()].map(([path, content]) => ({
       path,
       kind: "file",
-      size: Buffer.byteLength(content),
+      size: byteLength(content),
       updatedAt: new Date().toISOString()
     }));
   }
@@ -51,7 +55,7 @@ export class InMemoryFileStore implements FileStore {
   async write(path: string, content: string): Promise<WorkspaceFile> {
     const key = normalizePath(path);
     this.files.set(key, content);
-    return { path: key, kind: "file", size: Buffer.byteLength(content), updatedAt: new Date().toISOString() };
+    return { path: key, kind: "file", size: byteLength(content), updatedAt: new Date().toISOString() };
   }
 
   async delete(path: string): Promise<void> {
