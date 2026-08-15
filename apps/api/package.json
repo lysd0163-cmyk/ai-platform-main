@@ -1,0 +1,7 @@
+{
+  "name": "@ai-os/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {"build":"mkdir -p dist && cp src/server.mjs dist/server.mjs","start":"node dist/server.mjs"}
+}
