@@ -116,7 +116,12 @@ export class TaskExecutionRuntime {
         return task.status;
       }
 
-      const [step] = pending.splice(readyIndex, 1);
+      const step = pending.splice(readyIndex, 1)[0];
+      if (!step) {
+        task.status = "failed";
+        this.emit(task, "task.failed", undefined, { reason: "Ready step was unexpectedly missing" });
+        return task.status;
+      }
       this.emit(task, "step.ready", step.id, { dependencies: step.dependsOn });
 
       if (this.approvalPolicy.requiresApproval(step)) {
