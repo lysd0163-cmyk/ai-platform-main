@@ -1,4 +1,4 @@
-import type { LLMProvider, LLMRequest, LLMResponse, RoutingContext } from "./contracts";
+import type { LLMProvider, LLMRequest, LLMResponse, RoutingContext } from "./contracts.js";
 
 export class MultiModelRouter {
   private readonly providers = new Map<string, LLMProvider>();
