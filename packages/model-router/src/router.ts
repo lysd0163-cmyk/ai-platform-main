@@ -23,7 +23,9 @@ export class MultiModelRouter {
       context.requireTools ? provider.models.length > 0 : true
     );
     if (capable.length === 0) throw new Error("No model provider is configured");
-    return capable[0];
+    const provider = capable[0];
+    if (!provider) throw new Error("No model provider is configured");
+    return provider;
   }
 
   chooseModel(provider: LLMProvider, preferredModel?: string): string {
