@@ -1,5 +1,9 @@
 import OpenAI from "openai";
-import type { ChatMessage, LLMProvider, LLMRequest, LLMResponse, ToolCall } from "./contracts";
+import type { ChatMessage, LLMProvider, LLMRequest, LLMResponse, ToolCall } from "./contracts.js";
+
+type OpenAIFunctionToolCall = OpenAI.Chat.ChatCompletionMessageFunctionToolCall;
+
+type OpenAITool = NonNullable<LLMRequest["tools"]>[number];
 
 export interface OpenAIProviderOptions {
   apiKey?: string;
@@ -20,7 +24,7 @@ function toOpenAIMessage(message: ChatMessage): OpenAI.Chat.ChatCompletionMessag
   return {
     role: "assistant",
     content: message.content,
-    tool_calls: message.toolCalls?.map((call) => ({
+    tool_calls: message.toolCalls?.map((call: ToolCall) => ({
       id: call.id,
       type: "function",
       function: { name: call.name, arguments: call.argumentsJson }
@@ -51,7 +55,7 @@ export class OpenAIProvider implements LLMProvider {
       messages: request.messages.map(toOpenAIMessage),
       temperature: request.temperature,
       stream: false,
-      tools: request.tools?.map((tool) => ({
+      tools: request.tools?.map((tool: OpenAITool) => ({
         type: "function",
         function: {
           name: tool.name,
@@ -65,8 +69,8 @@ export class OpenAIProvider implements LLMProvider {
     if (!choice) throw new Error("OpenAI returned no choices");
 
     const toolCalls: ToolCall[] = (choice.message.tool_calls ?? [])
-      .filter((call): call is OpenAI.Chat.ChatCompletionMessageFunctionToolCall => call.type === "function")
-      .map((call) => ({ id: call.id, name: call.function.name, argumentsJson: call.function.arguments }));
+      .filter((call: OpenAI.Chat.Completions.ChatCompletionMessageToolCall): call is OpenAIFunctionToolCall => call.type === "function")
+      .map((call: OpenAIFunctionToolCall) => ({ id: call.id, name: call.function.name, argumentsJson: call.function.arguments }));
 
     const finishReason = choice.finish_reason === "tool_calls"
       ? "tool_calls"
