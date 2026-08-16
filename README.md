@@ -6,7 +6,9 @@ A modular AI Operating System foundation for building, running, automating, and 
 
 **Phases 1–12 implemented at the architecture/core-runtime level.**
 
-The repository now contains the platform foundation, multi-agent runtime, LLM integration, Universal Builder, IDE/Sandbox boundaries, Cloud/Deployment/Database abstractions, Automation/Integrations/MCP, Security/Enterprise/Billing, Trading, AI Media/Research, Marketplace/Plugins/SDK, and production release gates.
+The repository contains the platform foundation, multi-agent runtime, LLM integration, Universal Builder, IDE/Sandbox boundaries, Cloud/Deployment/Database abstractions, Automation/Integrations/MCP, Security/Enterprise/Billing, Trading, AI Media/Research, Marketplace/Plugins/SDK, and production release gates.
+
+The current release path validates the repository through install, typecheck, tests, lint, and build. Docker deployment images are also configured for environments where a generated pnpm lockfile is not yet committed.
 
 This is intentionally provider-neutral: real cloud, database, broker, payment, identity, media, and hardened sandbox adapters are configured per deployment environment rather than hard-coded into the core.
 
